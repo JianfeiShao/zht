@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<mapper namespace="User">
+	<!-- 任凯 开始 -->
+	<!-- <select id="findChildren2" parameterType="java.util.Map"
+		resultType="com.zcjy.mft.model.entity.Member">
+		select * from member where agent_parent_id=#{mem.agentParentId}
+		<if test="mem.memRole!=null"> and mem_role=#{mem.memRole} </if>
+		<if test="mem.memType!=null"> and mem_type=#{mem.memType} </if>
+		<if test="mem.memStatus!=null"> and mem_status=#{mem.memStatus} </if>
+		<if test="mem.phone!=null"> and phone like #{mem.phone} </if>
+		<if test="mem.wechatName!=null"> and wechat_name like #{mem.wechatName} </if>
+		<if test="mem.parentId!=null"> and parent_id=#{mem.parentId} </if>
+		and mem_role!=0 order by regdate_time desc
+		limit #{start},#{end}
+	</select>
+	<select id="findChildrenSize2" parameterType="java.util.Map"
+		resultType="java.lang.Integer">
+		select count(*) from member where agent_parent_id=#{mem.agentParentId}
+		<if test="mem.memRole!=null"> and mem_role=#{mem.memRole} </if>
+		<if test="mem.memType!=null"> and mem_type=#{mem.memType} </if>
+		<if test="mem.memStatus!=null">and mem_status=#{mem.memStatus} </if>
+		<if test="mem.phone!=null"> and phone like #{mem.phone} </if>
+		<if test="mem.wechatName!=null"> and wechat_name like #{mem.wechatName} </if>
+		<if test="mem.parentId!=null"> and parent_id=#{mem.parentId} </if>
+		and mem_role!=0
+	</select> -->
+	<!-- <select id="findDeposit" parameterType="java.util.Map"
+		resultType="com.zcjy.mft.model.entity.WithdrawDeposit">
+		select
+		withdraw_deposit.id,member.wechat_name,withdraw_deposit.withdeposit_no,withdraw_deposit.apply_date,
+		withdraw_deposit.with_ubean_amount,withdraw_deposit.withdeposit_amount,withdraw_deposit.audit_status,
+		member.phone,member.real_name from withdraw_deposit
+		inner join member on (withdeposit_memid=member.id)
+		where 1=1
+		<if test="deposit.wechatName!=null">
+			and member.wechat_name like #{deposit.wechatName}
+			<if test="deposit.withdepositNo!=null">and withdraw_deposit.withdeposit_no like
+				#{deposit.withdepositNo}</if>
+			or member.real_name like #{deposit.wechatName}
+			<if test="deposit.withdepositNo!=null">and withdraw_deposit.withdeposit_no like
+				#{deposit.withdepositNo}</if>
+		</if>
+		limit #{start},#{end}
+	</select>
+	<select id="findDepositSize" parameterType="java.util.Map"
+		resultType="java.lang.Integer">
+		select count(*) from withdraw_deposit
+		inner join member on (withdeposit_memid=member.id)
+		where 1=1
+		<if test="deposit.wechatName!=null">
+			and member.wechat_name like #{deposit.wechatName}
+			<if test="deposit.withdepositNo!=null">and withdraw_deposit.withdeposit_no like
+				#{deposit.withdepositNo}</if>
+			or member.real_name like #{deposit.wechatName}
+			<if test="deposit.withdepositNo!=null">and withdraw_deposit.withdeposit_no like
+				#{deposit.withdepositNo}</if>
+		</if>
+	</select> -->
+	<!-- 任凯 结束 -->
+
+	<!-- 代理商列表条件查询 -->
+	<!-- <select id="queryMemberByIdNameAccount" parameterType="Map"
+		resultType="com.zcjy.mft.model.entity.Member">
+		SELECT * from member where parent_id = 0
+		<if test='name!=""'> and real_name=#{name} </if>
+		<if test='status!=""'> AND mem_status=#{status} </if>
+		<if test='account!=""'> AND mem_loginnum = #{account} </if>
+		LIMIT #{page},#{row} 
+	</select> -->
+	
+	<!-- 条件查询  数据总和 -->
+	<!-- <select id="queryMemberCount" parameterType="Map" resultType="Integer">
+		SELECT COUNT(*) from member where parent_id = 0 
+		<if test='status!=""'>
+			AND mem_status = #{status}
+		</if>
+	</select> -->
+	
+	<!-- 查询用户充值记录 -->
+	<!-- <select id="queryUserRecordByMid" parameterType="Map"
+		resultType="com.zcjy.mft.model.entity.BeanOrderMember">
+		select mu.user_name,m.wechat_name,bo.id,bo.order_no,bo.buymember_id,bo.package_id,bo.buyubean_amount,bo.monetary_amount,
+		bo.sentmember_id,bo.order_time,bo.audit_status,bo.audit_reason,bo.receive_time 
+		from bean_order bo 
+		LEFT JOIN member m on bo.sentmember_id=m.id 
+ 		LEFT JOIN manage_user mu on bo.sentmember_id=mu.id
+		WHERE bo.buymember_id=#{ memid }
+
+		<if test='name!=""'>AND m.wechat_name=#{ name }</if>
+
+		<if test='startTime!=""'>
+			AND bo.order_time BETWEEN #{startTime} and #{endTime}
+		</if>
+
+		ORDER BY (bo.order_time) DESC
+	</select> -->
+	<!-- 查询代理商会员 -->
+	<!-- <select id="queryMemberVipByMultiCondition" parameterType="Map"
+		resultType="com.zcjy.mft.model.entity.CustomMemberResult">
+		SELECT
+		m.id AS agency_id,mb.id AS member_id,mbs.wechat_name as member_superior_name,mbs.id AS member_superior_id , mb.mem_role as member_role,mb.mem_type,mb.mem_status,mb.parent_id,mb.ubean_amount,mb.card_no,mb.bank_name,mb.ubean_level,mb.phone,mb.mem_sex,mb.city,mb.province,mb.country,mb.wechat_name,mb.headimgurl,mb.company_name,mb.mem_address,mb.regdate_time
+		,mb.wechat_name AS member_name
+		FROM member m 
+		JOIN member mb ON m.id=mb.agent_parent_id 
+		JOIN member mbs ON mbs.id=mb.parent_id
+		WHERE m.id=#{memid}
+		AND m.parent_id = 0
+		<if test="name!=''">
+			AND mb.wechat_name = #{ name }
+		</if>
+		<if test="stime!=''">
+			AND mb.regdate_time BETWEEN #{stime} and #{etime}
+		</if>
+		<if test='phone!=""'>
+			AND mb.phone = #{phone}
+		</if>
+		ORDER BY (mb.regdate_time) DESC
+		LIMIT #{start},#{end} 
+	</select> -->
+	<!-- 代理商会员总和 -->
+	<!-- <select id="querymembervipcount" parameterType="Map" resultType="Integer">
+		SELECT
+		count(*)
+		FROM member m 
+		JOIN member mb ON m.id=mb.agent_parent_id 
+		JOIN member mbs ON mbs.id=mb.parent_id
+		WHERE m.id=#{memid}
+		AND m.parent_id = 0
+		<if test="name!=''">
+			AND mb.wechat_name = #{ name }
+		</if>
+		<if test="stime!=''">
+			AND mb.regdate_time BETWEEN #{stime} and #{etime}
+		</if>
+		<if test='phone!=""'>
+			AND mb.phone = #{phone}
+		</if>
+	</select> -->
+</mapper>
+
